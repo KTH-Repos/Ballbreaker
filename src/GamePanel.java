@@ -28,6 +28,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     private int sliderheight = 10;
     private int sliderx = 300;
     private int slidery = 550;
+    private int sliderxvel = 20; //speed of slider in x-direction
+    private int slidervelx = 0;
 
     //Keylistener  for listening to key
     //ActionListener for moving the ball
@@ -53,18 +55,26 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         g.fillOval(ballx, bally, ballwidth, ballheight);
     }
 
-    //Todo: Bollen ska studsa mot slidern
+
     //Också införa en check om bollen missar slidern och går utanför
     //Checks för att kolla om bricksen (rektanglarna) kolliderar med bollen. kolla intersect() metoden i swing
     public void actionPerformed(ActionEvent e ) {
         bally += ballvely;
         ballx += ballvelx;
+        Rectangle ballEngulf = new Rectangle(ballx, bally, 20, 20);   //encloses the ball
+        Rectangle sliderEngulf = new Rectangle(sliderx, slidery, sliderwidth, sliderheight);   //encloses the slider
+
+        //Check if the two engulfers collide with each other
+        if(ballEngulf.intersects(sliderEngulf)) {
+            ballvely = -ballvely;
+        }
         if (bally > HEIGHT - ballheight || bally < 0) { //Varför går den utanför i bottenläget?
             ballvely = -ballvely;
         }
         if (ballx > WIDTH - ballwidth || ballx < 0) {
-            ballvelx = - ballvelx;
+            ballvelx = -ballvelx;
         }
+
         //checkcollisions();
         repaint();
     }
@@ -75,6 +85,10 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
     public void left() {
         sliderx += -20;
+    }
+
+    public void tick() {
+        //x +=
     }
 
 
