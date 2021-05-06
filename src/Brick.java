@@ -3,6 +3,7 @@ import java.awt.*;
 
 public class Brick extends JPanel{
 
+    //TODO: build bricks
     public void drawBrick() {
         repaint();      //Bricks visas inte i panelen?
     }

@@ -80,11 +80,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     }
 
     public void right() {
-        sliderx += 20;
+        sliderx += sliderxvel;
     }
 
     public void left() {
-        sliderx += -20;
+        sliderx += -sliderxvel;
     }
 
     public void tick() {
