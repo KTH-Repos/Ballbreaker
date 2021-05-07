@@ -17,8 +17,5 @@ public class Main{
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        Brick brick = new Brick();
-        frame.add(brick);
-        brick.drawBrick();
     }
 }

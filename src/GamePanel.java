@@ -28,10 +28,12 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     private int sliderheight = 10;
     private int sliderx = 300;
     private int slidery = 550;
-    private int slidervelx; //speed of slider in x-direction
+    private int slidervelx;
 
     //Keylistener  for listening to key
     //ActionListener for moving the ball
+
+    Brick brick = new Brick();
 
     Timer timer = new Timer(5, this); //Actionlistener listens for timer, when timer ticks, calls actionPerformed()
 
@@ -51,6 +53,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         //Ball
         g.setColor(Color.GREEN);
         g.fillOval(ballx, bally, ballwidth, ballheight);
+
+        //Bricks
+        brick.draw(g);
     }
 
 
@@ -59,19 +64,24 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     public void actionPerformed(ActionEvent e ) {
         bally += ballvely;
         ballx += ballvelx;
-        Rectangle ballEngulf = new Rectangle(ballx, bally, ballwidth, ballheight);   //encloses the ball
-        Rectangle sliderEngulf = new Rectangle(sliderx, slidery, sliderwidth, sliderheight);   //encloses the slider
 
         //Check if the two engulfers collide with each other
+        Rectangle ballEngulf = new Rectangle(ballx, bally, ballwidth, ballheight);   //encloses the ball
+        Rectangle sliderEngulf = new Rectangle(sliderx, slidery, sliderwidth, sliderheight);   //encloses the slider
         if(ballEngulf.intersects(sliderEngulf)) {
             ballvely = -ballvely;
         }
+
+        //Checks to keep the ball inside the game border
         if (bally > HEIGHT - ballheight || bally < 0) { //Varför går den utanför i bottenläget?
             ballvely = -ballvely;
         }
         if (ballx > WIDTH - ballwidth || ballx < 0) {
             ballvelx = -ballvelx;
         }
+
+        //check to keep the slider inside the game border, if it is move it back inside
+        sliderx += slidervelx;
         if (sliderx < 0) {
             slidervelx = 0;
             sliderx = 0;
@@ -81,7 +91,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
             sliderx = WIDTH-sliderwidth;
         }
 
-        sliderx += slidervelx;
 
 
         //checkcollisions();
