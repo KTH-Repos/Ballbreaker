@@ -21,21 +21,19 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     private int ballheight = 20;
     private int ballwidth = 20;
 
-    private int ballvelx = 1;
-    private int ballvely = 1;
+    private int ballvelx = 2;
+    private int ballvely = 2;
 
     private int sliderwidth = 100;
     private int sliderheight = 10;
     private int sliderx = 300;
     private int slidery = 550;
-    private int sliderxvel = 20; //speed of slider in x-direction
-    private int slidervelx = 0;
+    private int slidervelx; //speed of slider in x-direction
 
     //Keylistener  for listening to key
     //ActionListener for moving the ball
 
     Timer timer = new Timer(5, this); //Actionlistener listens for timer, when timer ticks, calls actionPerformed()
-    int velx = 0;
 
     public GamePanel() {
         timer.start();
@@ -61,7 +59,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     public void actionPerformed(ActionEvent e ) {
         bally += ballvely;
         ballx += ballvelx;
-        Rectangle ballEngulf = new Rectangle(ballx, bally, 20, 20);   //encloses the ball
+        Rectangle ballEngulf = new Rectangle(ballx, bally, ballwidth, ballheight);   //encloses the ball
         Rectangle sliderEngulf = new Rectangle(sliderx, slidery, sliderwidth, sliderheight);   //encloses the slider
 
         //Check if the two engulfers collide with each other
@@ -74,17 +72,28 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         if (ballx > WIDTH - ballwidth || ballx < 0) {
             ballvelx = -ballvelx;
         }
+        if (sliderx < 0) {
+            slidervelx = 0;
+            sliderx = 0;
+        }
+        if (sliderx > WIDTH - sliderwidth) {
+            slidervelx = 0;
+            sliderx = WIDTH-sliderwidth;
+        }
+
+        sliderx += slidervelx;
+
 
         //checkcollisions();
         repaint();
     }
 
     public void right() {
-        sliderx += sliderxvel;
+        slidervelx = 2;
     }
 
     public void left() {
-        sliderx += -sliderxvel;
+        slidervelx = -2;
     }
 
     public void tick() {
@@ -95,13 +104,10 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        System.out.println(code);
         if (code == KeyEvent.VK_RIGHT) {
-            if (sliderx < WIDTH-sliderwidth)
             right();
         }
         if (code == KeyEvent.VK_LEFT) {
-            if (sliderx > 0)
             left();
         }
     }
@@ -111,6 +117,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        velx = 0;
+        slidervelx = 0;
     }
 }
