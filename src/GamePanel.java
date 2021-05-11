@@ -33,7 +33,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     //Keylistener  for listening to key
     //ActionListener for moving the ball
 
-    Brick brick = new Brick();
+    Brick brick = new Brick(7, 10);
 
     Timer timer = new Timer(5, this); //Actionlistener listens for timer, when timer ticks, calls actionPerformed()
 
