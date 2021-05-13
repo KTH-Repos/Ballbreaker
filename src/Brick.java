@@ -1,11 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 public class Brick{
 
     public boolean brickBody[][];
-    public int brickWidth = 52;
-    public int brickHeight = 30;
+    public int brickWidth = 72;
+    public int brickHeight = 50;
 
     public Brick(int row, int col) {
         brickBody = new boolean[row][col];
@@ -18,15 +19,28 @@ public class Brick{
 
 
     public void draw(Graphics g) {
+        Random rand = new Random();
+        Graphics2D g2D = (Graphics2D) g;
         for(int i = 0; i < brickBody.length; i++) {
             for (int j = 0; j < brickBody[0].length; j++) {
                 if (brickBody[i][j]) {
-                    g.setColor(Color.gray);
-                    g.fillRect(j * brickWidth + 90, i * brickHeight + 40, brickWidth, brickHeight);
+                    g2D.setColor(Color.gray);
+                    g2D.fillRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
+                    g2D.setStroke(new BasicStroke(3));
+                    g2D.setColor(Color.black);
+                    g2D.drawRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
                 }
             }
         }
     }
+
+//    public int getCol() {
+//        return brickBody[0].length;
+//    }
+//
+//    public int getRow() {
+//        return brickBody.length;
+//    }
 
 
 }

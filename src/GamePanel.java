@@ -33,7 +33,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     //Keylistener  for listening to key
     //ActionListener for moving the ball
 
-    Brick brick = new Brick(7, 10);
+    Brick brick = new Brick(4, 7);
 
     Timer timer = new Timer(5, this); //Actionlistener listens for timer, when timer ticks, calls actionPerformed()
 
@@ -68,6 +68,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         //Check if the two engulfers collide with each other
         Rectangle ballEngulf = new Rectangle(ballx, bally, ballwidth, ballheight);   //encloses the ball
         Rectangle sliderEngulf = new Rectangle(sliderx, slidery, sliderwidth, sliderheight);   //encloses the slider
+        //Rectangle brickEngulf = new Rectangle()
         if(ballEngulf.intersects(sliderEngulf)) {
             ballvely = -ballvely;
         }
