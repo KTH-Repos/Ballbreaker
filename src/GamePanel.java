@@ -1,9 +1,12 @@
+import org.w3c.dom.css.Rect;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import javax.swing.*;
 
 /**
@@ -33,7 +36,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     //Keylistener  for listening to key
     //ActionListener for moving the ball
 
-    Brick brick = new Brick(4, 7);
+    Brick brick = new Brick(7, 10);
 
     Timer timer = new Timer(5, this); //Actionlistener listens for timer, when timer ticks, calls actionPerformed()
 
@@ -71,6 +74,19 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         //Rectangle brickEngulf = new Rectangle()
         if(ballEngulf.intersects(sliderEngulf)) {
             ballvely = -ballvely;
+        }
+
+        //Collision detection of ball and bricks
+        for(int i = 0; i < brick.brickBody.length; i++){
+            for(int j = 0; j < brick.brickBody[0].length; j++){
+                if(brick.brickBody[i][j]){
+                    Rectangle brickEngulf = new Rectangle(j*brick.brickWidth + 80,i*brick.brickHeight+40,brick.brickWidth,brick.brickHeight);
+                    if(ballEngulf.intersects(brickEngulf)){
+                        brick.setBrickVisible(false,i,j);
+                        brick.totalBricks--;
+                    }
+                }
+            }
         }
 
         //Checks to keep the ball inside the game border

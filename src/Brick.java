@@ -5,11 +5,13 @@ import java.util.Random;
 public class Brick{
 
     public boolean brickBody[][];
-    public int brickWidth = 72;
-    public int brickHeight = 50;
+    public int brickWidth = 52;
+    public int brickHeight = 30;
+    public int totalBricks;
 
     public Brick(int row, int col) {
         brickBody = new boolean[row][col];
+        totalBricks = row * col;
         for(int i = 0; i < brickBody.length; i++){
             for(int j = 0; j < brickBody[0].length; j++){
                 brickBody[i][j] = true;   //The bricks have not been hit by ball, otherwise false if they have been hit.
@@ -34,13 +36,17 @@ public class Brick{
         }
     }
 
-//    public int getCol() {
-//        return brickBody[0].length;
-//    }
-//
-//    public int getRow() {
-//        return brickBody.length;
-//    }
+    public void setBrickVisible(boolean visibility, int row, int col) {
+        brickBody[row][col] = visibility;
+    }
+
+    public int getCol() {
+        return brickBody[0].length;
+    }
+
+    public int getRow() {
+        return brickBody.length;
+    }
 
 
 }
