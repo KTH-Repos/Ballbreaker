@@ -1,9 +1,12 @@
+import org.w3c.dom.css.Rect;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import javax.swing.*;
 
 /**
@@ -68,8 +71,22 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         //Check if the two engulfers collide with each other
         Rectangle ballEngulf = new Rectangle(ballx, bally, ballwidth, ballheight);   //encloses the ball
         Rectangle sliderEngulf = new Rectangle(sliderx, slidery, sliderwidth, sliderheight);   //encloses the slider
+        //Rectangle brickEngulf = new Rectangle()
         if(ballEngulf.intersects(sliderEngulf)) {
             ballvely = -ballvely;
+        }
+
+        //Collision detection of ball and bricks
+        for(int i = 0; i < brick.brickBody.length; i++){
+            for(int j = 0; j < brick.brickBody[0].length; j++){
+                if(brick.brickBody[i][j]){
+                    Rectangle brickEngulf = new Rectangle(j*brick.brickWidth + 80,i*brick.brickHeight+40,brick.brickWidth,brick.brickHeight);
+                    if(ballEngulf.intersects(brickEngulf)){
+                        brick.setBrickVisible(false,i,j);
+                        brick.totalBricks--;
+                    }
+                }
+            }
         }
 
         //Checks to keep the ball inside the game border
