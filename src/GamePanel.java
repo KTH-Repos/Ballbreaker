@@ -20,12 +20,12 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     private int score = 0;
 
     private int ballx = 200;
-    private int bally = 150;
+    private int bally = 300;
     private int ballheight = 20;
     private int ballwidth = 20;
 
-    private int ballvelx = 2;
-    private int ballvely = 2;
+    private int ballvelx = 1;
+    private int ballvely = 1;
 
     private int sliderwidth = 100;
     private int sliderheight = 10;
@@ -67,13 +67,15 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     public void actionPerformed(ActionEvent e ) {
         bally += ballvely;
         ballx += ballvelx;
+        sliderx += slidervelx;
 
         //Check if the two engulfers collide with each other
         Rectangle ballEngulf = new Rectangle(ballx, bally, ballwidth, ballheight);   //encloses the ball
         Rectangle sliderEngulf = new Rectangle(sliderx, slidery, sliderwidth, sliderheight);   //encloses the slider
         //Rectangle brickEngulf = new Rectangle()
+
         if(ballEngulf.intersects(sliderEngulf)) {
-            if (ballx + ballwidth <= sliderx || ballx >= sliderx + sliderwidth) {
+            if (ballx + ballwidth -2 <= sliderx || ballx + 2 >= sliderx + sliderwidth) {
                 ballvelx = -ballvelx;
             }
             else {
@@ -89,6 +91,12 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                     if(ballEngulf.intersects(brickEngulf)){
                         brick.setBrickVisible(false,i,j);
                         brick.totalBricks--;
+                        if (ballx + ballwidth -2 <= j*brick.brickWidth + 80 || ballx + 2 >= j*brick.brickWidth + 80 + brick.brickWidth) {
+                            ballvelx = -ballvelx;
+                        }
+                        else {
+                            ballvely = - ballvely;
+                        }
                     }
                 }
             }
@@ -103,7 +111,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         }
 
         //check to keep the slider inside the game border, if it is move it back inside
-        sliderx += slidervelx;
         if (sliderx < 0) {
             slidervelx = 0;
             sliderx = 0;
