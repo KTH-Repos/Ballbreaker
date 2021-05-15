@@ -73,7 +73,12 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         Rectangle sliderEngulf = new Rectangle(sliderx, slidery, sliderwidth, sliderheight);   //encloses the slider
         //Rectangle brickEngulf = new Rectangle()
         if(ballEngulf.intersects(sliderEngulf)) {
-            ballvely = -ballvely;
+            if (ballx + ballwidth <= sliderx || ballx >= sliderx + sliderwidth) {
+                ballvelx = -ballvelx;
+            }
+            else {
+                ballvely = - ballvely;
+            }
         }
 
         //Collision detection of ball and bricks
