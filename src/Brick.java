@@ -19,14 +19,55 @@ public class Brick{
         }
     }
 
-
     public void draw(Graphics g) {
         Random rand = new Random();
         Graphics2D g2D = (Graphics2D) g;
         for(int i = 0; i < brickBody.length; i++) {
             for (int j = 0; j < brickBody[0].length; j++) {
-                if (brickBody[i][j]) {
+                if (brickBody[i][j] && i == 1) {
                     g2D.setColor(Color.gray);
+                    g2D.fillRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
+                    g2D.setStroke(new BasicStroke(3));
+                    g2D.setColor(Color.black);
+                    g2D.drawRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
+                }
+                if(brickBody[i][j] && i == 2){
+                    g2D.setColor(Color.red);
+                    g2D.fillRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
+                    g2D.setStroke(new BasicStroke(3));
+                    g2D.setColor(Color.black);
+                    g2D.drawRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
+                }
+                if(brickBody[i][j] && i == 3){
+                    g2D.setColor(Color.green);
+                    g2D.fillRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
+                    g2D.setStroke(new BasicStroke(3));
+                    g2D.setColor(Color.black);
+                    g2D.drawRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
+                }
+                if(brickBody[i][j] && i == 4){
+                    g2D.setColor(Color.yellow);
+                    g2D.fillRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
+                    g2D.setStroke(new BasicStroke(3));
+                    g2D.setColor(Color.black);
+                    g2D.drawRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
+                }
+                if(brickBody[i][j] && i == 5){
+                    g2D.setColor(Color.orange);
+                    g2D.fillRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
+                    g2D.setStroke(new BasicStroke(3));
+                    g2D.setColor(Color.black);
+                    g2D.drawRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
+                }
+                if(brickBody[i][j] && i == 6){
+                    g2D.setColor(Color.blue);
+                    g2D.fillRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
+                    g2D.setStroke(new BasicStroke(3));
+                    g2D.setColor(Color.black);
+                    g2D.drawRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
+                }
+                if(brickBody[i][j] && i == 7){
+                    g2D.setColor(Color.cyan);
                     g2D.fillRect(j * brickWidth + 80, i * brickHeight + 40, brickWidth, brickHeight);
                     g2D.setStroke(new BasicStroke(3));
                     g2D.setColor(Color.black);
@@ -38,6 +79,10 @@ public class Brick{
 
     public void setBrickVisible(boolean visibility, int row, int col) {
         brickBody[row][col] = visibility;
+    }
+
+    public void colorBricks(Graphics g, Color brickColor){
+
     }
 
     public int getCol() {
