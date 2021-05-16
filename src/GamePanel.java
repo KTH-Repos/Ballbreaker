@@ -24,8 +24,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     private int ballheight = 20;
     private int ballwidth = 20;
 
-    private int ballvelx = 3;
-    private int ballvely = 3;
+    private int ballvelx = 2;
+    private int ballvely = 2;
 
     private int sliderwidth = 100;
     private int sliderheight = 10;
@@ -111,11 +111,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     }
 
     public void right() {
-        slidervelx = 3;
+        slidervelx = 2;
     }
 
     public void left() {
-        slidervelx = -3;
+        slidervelx = -2;
     }
 
     public void tick() {
@@ -133,12 +133,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                         brick.totalBricks--;
                         if (ballx + ballwidth -2 <= j*brick.brickWidth + 80 || ballx + 2 >= j*brick.brickWidth + 80 + brick.brickWidth) {
                             ballvelx = -ballvelx;
-                            return;
                         }
                         else {
                             ballvely = - ballvely;
-                            return;
                         }
+                        return;
                     }
                 }
             }
