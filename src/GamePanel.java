@@ -24,8 +24,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     private int ballheight = 20;
     private int ballwidth = 20;
 
-    private int ballvelx = 1;
-    private int ballvely = 1;
+    private int ballvelx = 2;
+    private int ballvely = 2;
 
     private int sliderwidth = 100;
     private int sliderheight = 10;
@@ -84,23 +84,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         }
 
         //Collision detection of ball and bricks
-        for(int i = 0; i < brick.brickBody.length; i++){
-            for(int j = 0; j < brick.brickBody[0].length; j++){
-                if(brick.brickBody[i][j]){
-                    Rectangle brickEngulf = new Rectangle(j*brick.brickWidth + 80,i*brick.brickHeight+40,brick.brickWidth,brick.brickHeight);
-                    if(ballEngulf.intersects(brickEngulf)){
-                        brick.setBrickVisible(false,i,j);
-                        brick.totalBricks--;
-                        if (ballx + ballwidth -2 <= j*brick.brickWidth + 80 || ballx + 2 >= j*brick.brickWidth + 80 + brick.brickWidth) {
-                            ballvelx = -ballvelx;
-                        }
-                        else {
-                            ballvely = - ballvely;
-                        }
-                    }
-                }
-            }
-        }
+        checkBrickCollision();
 
         //Checks to keep the ball inside the game border
         if (bally > HEIGHT - ballheight || bally < 0) { //Varför går den utanför i bottenläget?
@@ -136,6 +120,28 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
     public void tick() {
         //x +=
+    }
+
+    public void checkBrickCollision() {
+        Rectangle ballEngulf = new Rectangle(ballx, bally, ballwidth, ballheight);
+        for(int i = 0; i < brick.brickBody.length; i++){
+            for(int j = 0; j < brick.brickBody[0].length; j++){
+                if(brick.brickBody[i][j]){
+                    Rectangle brickEngulf = new Rectangle(j*brick.brickWidth + 80,i*brick.brickHeight+40,brick.brickWidth,brick.brickHeight);
+                    if(ballEngulf.intersects(brickEngulf)){
+                        brick.setBrickVisible(false,i,j);
+                        brick.totalBricks--;
+                        if (ballx + ballwidth -2 <= j*brick.brickWidth + 80 || ballx + 2 >= j*brick.brickWidth + 80 + brick.brickWidth) {
+                            ballvelx = -ballvelx;
+                        }
+                        else {
+                            ballvely = - ballvely;
+                        }
+                        return;
+                    }
+                }
+            }
+        }
     }
 
 
