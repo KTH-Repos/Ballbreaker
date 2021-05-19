@@ -16,7 +16,7 @@ import javax.swing.*;
 public class GamePanel extends JPanel implements KeyListener, ActionListener {
     private static final int WIDTH = 700, HEIGHT = 600; //Game area
 
-    private boolean running = false;
+    private boolean running = true;
     private int score = 0;
 
     private int ballx = 200;
@@ -56,6 +56,25 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         //Ball
         g.setColor(Color.GREEN);
         g.fillOval(ballx, bally, ballwidth, ballheight);
+
+        if(bally > 570) {
+            timer.stop();
+            running = false;
+            ballx = 0;
+            bally = 0;
+            g.setColor(Color.RED);
+            g.setFont(new Font("TimesRoman", Font.BOLD, 30));
+            g.drawString("Game over. Your score is " + score, 150, 400);
+
+            g.setFont(new Font("TimesRoman", Font.BOLD, 30));
+            g.drawString("  Press Enter to Restart!", 150, 440 );
+        }
+
+        //Score
+        g.setColor(Color.black);
+        g.setFont(new Font("TimesRoman", Font.BOLD, 20));
+        g.drawString("Your score: " + score, 550, 30);
+        //g.drawString("Bricks: " + brick.totalBricks + "/70", 550, 50);
 
         //Bricks
         brick.draw(g);
@@ -131,6 +150,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                     if(ballEngulf.intersects(brickEngulf)){
                         brick.setBrickVisible(false,i,j);
                         brick.totalBricks--;
+                        score += 3;
                         if (ballx + ballwidth -2 <= j*brick.brickWidth + 80 || ballx + 2 >= j*brick.brickWidth + 80 + brick.brickWidth) {
                             ballvelx = -ballvelx;
                         }
@@ -153,6 +173,19 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         }
         if (code == KeyEvent.VK_LEFT) {
             left();
+        }
+        if (code == KeyEvent.VK_ENTER) {    //restart game
+            if(!running) {
+                running = true;
+                bally = 530;
+                ballx = 300;
+                sliderx = 300;
+                score = 0;
+                brick.totalBricks = 70;
+                brick = new Brick(7, 10);
+                timer.start();
+                repaint();
+            }
         }
     }
 
