@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Brick{
@@ -25,7 +26,6 @@ public class Brick{
     }
 
     public void draw(Graphics g) {
-        Random rand = new Random();
         Graphics2D g2D = (Graphics2D) g;
         for(int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -97,6 +97,4 @@ public class Brick{
     public int getRow() {
         return brickBody.length;
     }
-
-
 }

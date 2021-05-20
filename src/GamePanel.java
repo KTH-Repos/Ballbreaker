@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
 import javax.swing.*;
 
 /**
@@ -18,6 +19,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
     private boolean running = true;
     private int score = 0;
+    private int chances = 3;
 
     private int ballx = 200;
     private int bally = 300;
@@ -56,22 +58,25 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.GREEN);
         g.fillOval(ballx, bally, ballwidth, ballheight);
 
-        if(bally > 570) {
+        if(bally > 570) {     //if you lose the ball
             timer.stop();
             running = false;
-            ballx = 0;
-            bally = 0;
-            popUpGameOverWindow();
-//            g.setColor(Color.RED);
-//            g.setFont(new Font("TimesRoman", Font.BOLD, 30));
-//            g.drawString("Game over. Your score is " + score, 150, 400);
-//
-//
-//            g.setFont(new Font("TimesRoman", Font.BOLD, 30));
-//            g.drawString("  Press Enter to Restart!", 150, 440 );
+            chances--;
+            if(chances == 0){    //if you lose the game and have 0 chances
+                popUpGameOverWindow();
+            }
+            else{                //if you still have chances left.
+                restartGame(g);
+            }
         }
 
-        //Score
+        if(brick.totalBricks == 0) {
+            timer.stop();
+            running = false;
+            popUpGameWinWindow();
+        }
+
+        //Score Board
         g.setColor(Color.black);
         g.setFont(new Font("TimesRoman", Font.BOLD, 20));
         g.drawString("Your score: " + score, 550, 30);
@@ -83,7 +88,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
     //Också införa en check om bollen missar slidern och går utanför
     //Checks för att kolla om bricksen (rektanglarna) kolliderar med bollen. kolla intersect() metoden i swing
-    public void actionPerformed(ActionEvent e ) {
+    public void actionPerformed(ActionEvent e) {
             bally += ballvely;
             ballx += ballvelx;
             sliderx += slidervelx;
@@ -121,11 +126,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                 slidervelx = 0;
                 sliderx = WIDTH - sliderwidth;
             }
-
-
-            //checkcollisions();
             repaint();
-
     }
 
     public void right() {
@@ -144,7 +145,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                 if(brick.brickBody[i][j]){
                     Rectangle brickEngulf = new Rectangle(j*brick.brickWidth + 80,i*brick.brickHeight+40,brick.brickWidth,brick.brickHeight);
                     if(ballEngulf.intersects(brickEngulf)){
-                        score += 10;
+                        score += 1;
                         brick.setBrickVisible(false,i,j);
                         brick.totalBricks--;
                         if (ballx + ballwidth -2 <= j*brick.brickWidth + 80 || ballx + 2 >= j*brick.brickWidth + 80 + brick.brickWidth) {
@@ -170,21 +171,18 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         if (code == KeyEvent.VK_LEFT) {
             left();
         }
-//        if(code == KeyEvent.VK_ENTER) {
-//            if (running == false) {     //restart game
-//                if (!running) {
-//                    running = true;
-//                    bally = 530;
-//                    ballx = 300;
-//                    sliderx = 300;
-//                    score = 0;
-//                    brick.totalBricks = 70;
-//                    brick = new Brick(7, 10);
-//                    repaint();
-//                    timer.start();
-//                }
-//            }
-//        }
+        if(code == KeyEvent.VK_ESCAPE) {  //to pause the game
+            if (running == true) {
+                running = false;
+                timer.stop();
+            }
+        }
+        if(code == KeyEvent.VK_SPACE) {    //to start the game after pause
+            if (running == false) {
+                running = true;
+                timer.start();
+            }
+        }
     }
 
     @Override
@@ -196,20 +194,58 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     }
 
     public void popUpGameOverWindow() {
-        int window = JOptionPane.showConfirmDialog(null, "Game over. Your score is " + score + "  Press Yes to Restart! Press No to exit", "", JOptionPane.YES_NO_OPTION);
+        int window = JOptionPane.showConfirmDialog(null, "Game over. Your score is " + score + ". Press Yes to Restart" + "\nPress No to exit", "", JOptionPane.YES_NO_OPTION);
         if(window == JOptionPane.YES_OPTION) {
             running = true;
             bally = 530;
             ballx = 300;
             sliderx = 300;
             score = 0;
-            brick.totalBricks = 70;
-            brick = new Brick(7, 10);
+            chances = 3;
+            brick.totalBricks = brick.getRow() * brick.getCol();
+            brick = new Brick(brick.getRow(), brick.getCol());
             repaint();
             timer.start();
         }
         else{
             System.exit(0);
+        }
+    }
+
+    public void popUpGameWinWindow() {
+        int window = JOptionPane.showConfirmDialog(null, "Congrats!!! You won the game Press Yes to Restart" + "\nPress No to exit", "", JOptionPane.YES_NO_OPTION);
+        if(window == JOptionPane.YES_OPTION) {
+            running = true;
+            bally = 530;
+            ballx = 300;
+            sliderx = 300;
+            score = 0;
+            chances = 3;
+            brick.totalBricks = brick.getRow() * brick.getCol();
+            brick = new Brick(brick.getRow(), brick.getCol());
+            repaint();
+            timer.start();
+        }
+         else {
+            System.exit(0);
+        }
+    }
+
+    public void restartGame(Graphics g) {
+        int window = JOptionPane.showConfirmDialog(null, "You got " + chances + " chances left", "", JOptionPane.PLAIN_MESSAGE);
+        if (window == JOptionPane.OK_OPTION) {
+            for (int i = 0; i < brick.getRow(); i++) {
+                for (int j = 0; j < brick.getCol(); j++) {
+                    if (brick.brickBody[i][j]) {
+                        brick.draw(g);
+                    }
+                }
+            }
+            running = true;
+            bally = 530;
+            ballx = 300;
+            sliderx = 300;
+            timer.start();
         }
     }
 }
