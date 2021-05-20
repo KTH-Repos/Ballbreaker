@@ -45,7 +45,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
-
     }
 
     public void paintComponent(Graphics g) {
@@ -62,12 +61,14 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
             running = false;
             ballx = 0;
             bally = 0;
-            g.setColor(Color.RED);
-            g.setFont(new Font("TimesRoman", Font.BOLD, 30));
-            g.drawString("Game over. Your score is " + score, 150, 400);
-
-            g.setFont(new Font("TimesRoman", Font.BOLD, 30));
-            g.drawString("  Press Enter to Restart!", 150, 440 );
+            popUpGameOverWindow();
+//            g.setColor(Color.RED);
+//            g.setFont(new Font("TimesRoman", Font.BOLD, 30));
+//            g.drawString("Game over. Your score is " + score, 150, 400);
+//
+//
+//            g.setFont(new Font("TimesRoman", Font.BOLD, 30));
+//            g.drawString("  Press Enter to Restart!", 150, 440 );
         }
 
         //Score
@@ -169,21 +170,21 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         if (code == KeyEvent.VK_LEFT) {
             left();
         }
-        if(code == KeyEvent.VK_ENTER) {
-            if (running == false) {     //restart game
-                if (!running) {
-                    running = true;
-                    bally = 530;
-                    ballx = 300;
-                    sliderx = 300;
-                    score = 0;
-                    brick.totalBricks = 70;
-                    brick = new Brick(7, 10);
-                    timer.start();
-                    repaint();
-                }
-            }
-        }
+//        if(code == KeyEvent.VK_ENTER) {
+//            if (running == false) {     //restart game
+//                if (!running) {
+//                    running = true;
+//                    bally = 530;
+//                    ballx = 300;
+//                    sliderx = 300;
+//                    score = 0;
+//                    brick.totalBricks = 70;
+//                    brick = new Brick(7, 10);
+//                    repaint();
+//                    timer.start();
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -192,5 +193,23 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     @Override
     public void keyReleased(KeyEvent e) {
         slidervelx = 0;
+    }
+
+    public void popUpGameOverWindow() {
+        int window = JOptionPane.showConfirmDialog(null, "Game over. Your score is " + score + "  Press Yes to Restart! Press No to exit", "", JOptionPane.YES_NO_OPTION);
+        if(window == JOptionPane.YES_OPTION) {
+            running = true;
+            bally = 530;
+            ballx = 300;
+            sliderx = 300;
+            score = 0;
+            brick.totalBricks = 70;
+            brick = new Brick(7, 10);
+            repaint();
+            timer.start();
+        }
+        else{
+            System.exit(0);
+        }
     }
 }
