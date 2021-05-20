@@ -16,7 +16,7 @@ import javax.swing.*;
 public class GamePanel extends JPanel implements KeyListener, ActionListener {
     private static final int WIDTH = 700, HEIGHT = 600; //Game area
 
-    private boolean playing = false;
+    private boolean running = true;
     private int score = 0;
 
     private int ballx = 200;
@@ -41,6 +41,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     Timer timer = new Timer(5, this); //Actionlistener listens for timer, when timer ticks, calls actionPerformed()
 
     public GamePanel() {
+        timer.start();
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
@@ -56,6 +57,24 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.GREEN);
         g.fillOval(ballx, bally, ballwidth, ballheight);
 
+        if(bally > 570) {
+            timer.stop();
+            running = false;
+            ballx = 0;
+            bally = 0;
+            g.setColor(Color.RED);
+            g.setFont(new Font("TimesRoman", Font.BOLD, 30));
+            g.drawString("Game over. Your score is " + score, 150, 400);
+
+            g.setFont(new Font("TimesRoman", Font.BOLD, 30));
+            g.drawString("  Press Enter to Restart!", 150, 440 );
+        }
+
+        //Score
+        g.setColor(Color.black);
+        g.setFont(new Font("TimesRoman", Font.BOLD, 20));
+        g.drawString("Your score: " + score, 550, 30);
+
         //Bricks
         brick.draw(g);
     }
@@ -64,7 +83,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     //Också införa en check om bollen missar slidern och går utanför
     //Checks för att kolla om bricksen (rektanglarna) kolliderar med bollen. kolla intersect() metoden i swing
     public void actionPerformed(ActionEvent e ) {
-        if (playing == true) {
             bally += ballvely;
             ballx += ballvelx;
             sliderx += slidervelx;
@@ -106,7 +124,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
             //checkcollisions();
             repaint();
-        }
+
     }
 
     public void right() {
@@ -151,10 +169,19 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         if (code == KeyEvent.VK_LEFT) {
             left();
         }
-        if (playing == false) {
-            if (code == KeyEvent.VK_ENTER) {
-                playing = true;
-                timer.start();
+        if(code == KeyEvent.VK_ENTER) {
+            if (running == false) {     //restart game
+                if (!running) {
+                    running = true;
+                    bally = 530;
+                    ballx = 300;
+                    sliderx = 300;
+                    score = 0;
+                    brick.totalBricks = 70;
+                    brick = new Brick(7, 10);
+                    timer.start();
+                    repaint();
+                }
             }
         }
     }
