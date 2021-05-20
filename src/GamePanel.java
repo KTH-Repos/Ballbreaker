@@ -41,7 +41,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     Timer timer = new Timer(5, this); //Actionlistener listens for timer, when timer ticks, calls actionPerformed()
 
     public GamePanel() {
-        timer.start();
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
@@ -84,49 +83,49 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     //Också införa en check om bollen missar slidern och går utanför
     //Checks för att kolla om bricksen (rektanglarna) kolliderar med bollen. kolla intersect() metoden i swing
     public void actionPerformed(ActionEvent e ) {
-        bally += ballvely;
-        ballx += ballvelx;
-        sliderx += slidervelx;
+        if (playing == true) {
+            bally += ballvely;
+            ballx += ballvelx;
+            sliderx += slidervelx;
 
-        //Check if the two engulfers collide with each other
-        Rectangle ballEngulf = new Rectangle(ballx, bally, ballwidth, ballheight);   //encloses the ball
-        Rectangle sliderEngulf = new Rectangle(sliderx, slidery, sliderwidth, sliderheight);   //encloses the slider
-        //Rectangle brickEngulf = new Rectangle()
+            //Check if the two engulfers collide with each other
+            Rectangle ballEngulf = new Rectangle(ballx, bally, ballwidth, ballheight);   //encloses the ball
+            Rectangle sliderEngulf = new Rectangle(sliderx, slidery, sliderwidth, sliderheight);   //encloses the slider
+            //Rectangle brickEngulf = new Rectangle()
 
-        if(ballEngulf.intersects(sliderEngulf)) {
-            if (ballx + ballwidth -2 <= sliderx || ballx + 2 >= sliderx + sliderwidth) {
+            if (ballEngulf.intersects(sliderEngulf)) {
+                if (ballx + ballwidth - 2 <= sliderx || ballx + 2 >= sliderx + sliderwidth) {
+                    ballvelx = -ballvelx;
+                } else {
+                    ballvely = -ballvely;
+                }
+            }
+
+            //Collision detection of ball and bricks
+            checkBrickCollision();
+
+            //Checks to keep the ball inside the game border
+            if (bally > HEIGHT - ballheight || bally < 0) { //Varför går den utanför i bottenläget?
+                ballvely = -ballvely;
+            }
+            if (ballx > WIDTH - ballwidth || ballx < 0) {
                 ballvelx = -ballvelx;
             }
-            else {
-                ballvely = - ballvely;
+
+            //check to keep the slider inside the game border, if it is move it back inside
+            if (sliderx < 0) {
+                slidervelx = 0;
+                sliderx = 0;
             }
+            if (sliderx > WIDTH - sliderwidth) {
+                slidervelx = 0;
+                sliderx = WIDTH - sliderwidth;
+            }
+
+
+            //checkcollisions();
+            repaint();
         }
-
-        //Collision detection of ball and bricks
-        checkBrickCollision();
-
-        //Checks to keep the ball inside the game border
-        if (bally > HEIGHT - ballheight || bally < 0) { //Varför går den utanför i bottenläget?
-            ballvely = -ballvely;
-        }
-        if (ballx > WIDTH - ballwidth || ballx < 0) {
-            ballvelx = -ballvelx;
-        }
-
-        //check to keep the slider inside the game border, if it is move it back inside
-        if (sliderx < 0) {
-            slidervelx = 0;
-            sliderx = 0;
-        }
-        if (sliderx > WIDTH - sliderwidth) {
-            slidervelx = 0;
-            sliderx = WIDTH-sliderwidth;
-        }
-
-
-
-        //checkcollisions();
-        repaint();
     }
 
     public void right() {
@@ -137,9 +136,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         slidervelx = -2;
     }
 
-    public void tick() {
-        //x +=
-    }
 
     public void checkBrickCollision() {
         Rectangle ballEngulf = new Rectangle(ballx, bally, ballwidth, ballheight);
@@ -148,6 +144,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                 if(brick.brickBody[i][j]){
                     Rectangle brickEngulf = new Rectangle(j*brick.brickWidth + 80,i*brick.brickHeight+40,brick.brickWidth,brick.brickHeight);
                     if(ballEngulf.intersects(brickEngulf)){
+                        score += 10;
                         brick.setBrickVisible(false,i,j);
                         brick.totalBricks--;
                         score += 3;
